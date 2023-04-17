@@ -7,23 +7,27 @@ def sum_number(num: int):
 def test_palindrome(num: int):
     return str(num) == str(num)[::-1]
 
-max_steps = 500
-successful = []
-failure = []
+start = 0 # Where to start
+end = 2000 # Where to end
+max_steps = 500 # Max attempts before making a failure to prevent infinite loops
 
-for x in range(1,2000):
+# Arrays to hold numbers 
+results = []
+
+for x in range(start, end):
     num = x
     steps = 0
 
     while test_palindrome(num) is not True and steps < max_steps:
         steps += 1
         num = sum_number(num)
+    
+    result = {
+        "number" : x,
+        "isPalindrome": True if steps < max_steps else False,
+        "steps" : steps
+    }
 
-    if steps < max_steps:
-        # print("Palindrome for {} found after {} operations! Final number was {}".format(x, steps, num))
-        successful.append((x, steps))
-    else:
-        # print("Palindrome for {} NOT found after exceeding max operations! Final number was {}".format(x, num))
-        failure.append((x, steps))
+    results.append(result)    
 
-print("Failed: {}".format(failure))
+print("Failed: {}".format(list(filter(lambda x : x["isPalindrome"] == False, results))))
